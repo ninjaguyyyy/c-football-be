@@ -1,4 +1,5 @@
 const { OAuth2Client } = require('google-auth-library');
+const tokenService = require('./token.service');
 const usersService = require('./users.service');
 const oAuth2Client = new OAuth2Client(process.env.GoogleClientId);
 
@@ -24,9 +25,10 @@ exports.loginWithGoogle = async (idToken) => {
       avatar: picture,
     });
 
+    const tokens = await tokenService.generateAuthTokens(user);
     return {
       isSuccess: true,
-      accessToken: 'a',
+      tokens,
     };
   } catch (err) {
     console.log(err);
