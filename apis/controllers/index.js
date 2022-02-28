@@ -1,2 +1,3 @@
 //
-module.exports.conversationsController = require('./conversations.controller');
+exports.conversationsController = require('./conversations.controller');
+exports.authController = require('./auth.controller');
