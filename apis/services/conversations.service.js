@@ -6,6 +6,5 @@ exports.createConversation = async (conversation) => {
 };
 
 exports.queryConversations = async (filter, options) => {
-  const users = await User.paginate(filter, options);
-  return users;
+  return Conversation.paginate(filter, options);
 };

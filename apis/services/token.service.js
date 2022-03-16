@@ -8,7 +8,7 @@ const tokenTypes = {
 };
 
 exports.generateAuthTokens = async (user) => {
-  const accessTokenExpires = moment().add(jwtAccessExpired / 60, 'minutes');
+  const accessTokenExpires = moment().add(jwtAccessExpired, 'minutes');
   const accessToken = generateToken(user.id, accessTokenExpires, tokenTypes.ACCESS);
 
   return {
