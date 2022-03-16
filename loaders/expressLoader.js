@@ -5,6 +5,7 @@ const { createServer } = require('http');
 const morgan = require('morgan');
 
 const routeConfig = require('../apis/routes');
+const { errorHandler, errorConverter } = require('../middlewares/error');
 
 module.exports = () => {
   const app = express();
@@ -26,12 +27,8 @@ module.exports = () => {
     });
   });
 
-  app.use(function (err, req, res, next) {
-    console.error(err.stack);
-    res.status(500).json({
-      error_message: 'Something broke!',
-    });
-  });
+  app.use(errorConverter);
+  app.use(errorHandler);
 
   httpServer.listen(process.env.PORT || 5000, () => {
     console.log('Server is running ...');

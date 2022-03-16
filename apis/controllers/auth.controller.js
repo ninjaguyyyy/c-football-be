@@ -1,4 +1,10 @@
-const { authService } = require('../services');
+const { authService, usersService } = require('../services');
+
+exports.register = async (req, res) => {
+  const user = await usersService.createUser(req.body);
+
+  res.status(201).json({ user });
+};
 
 exports.loginWithGoogle = async (req, res) => {
   const { isSuccess, tokens, message } = await authService.loginWithGoogle(req.body.idToken);

@@ -1,7 +1,31 @@
 const { OAuth2Client } = require('google-auth-library');
 const tokenService = require('./token.service');
 const usersService = require('./users.service');
+const { User } = require('../models/');
 const oAuth2Client = new OAuth2Client(process.env.GoogleClientId);
+
+exports.register = async (username, password) => {
+  let isUsernameExist = await User.isEmailExist();
+  if (isUsernameExist) {
+    return { success: false, message: 'Username is already created.' };
+  }
+
+  let isEmailExist = await checkEmailExist(user.email);
+  if (isEmailExist) {
+    return UsersResponses.RegisterResponses.registerAlreadyEmail();
+  }
+
+  const hashedPassword = hashingManager.generateHashPassword(user.passWord);
+  user.passWord = hashedPassword;
+
+  user.otp = createOTP();
+
+  const userDocument = await UserRepository.insertUser(user);
+
+  emailService.sendOTP(user.email, user.otp.number);
+
+  return UsersResponses.RegisterResponses.registerSuccess(userDocument);
+};
 
 exports.loginWithGoogle = async (idToken) => {
   try {
