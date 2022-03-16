@@ -13,3 +13,7 @@ exports.createUser = async (user) => {
   }
   return User.create(user);
 };
+
+exports.getByUsername = async (username) => {
+  return User.findOne({ username });
+};

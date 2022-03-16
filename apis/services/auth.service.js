@@ -1,30 +1,20 @@
 const { OAuth2Client } = require('google-auth-library');
-const tokenService = require('./token.service');
 const usersService = require('./users.service');
-const { User } = require('../models/');
+const ApiError = require('../../utils/api-error');
 const oAuth2Client = new OAuth2Client(process.env.GoogleClientId);
 
-exports.register = async (username, password) => {
-  let isUsernameExist = await User.isEmailExist();
-  if (isUsernameExist) {
-    return { success: false, message: 'Username is already created.' };
+exports.loginWithUsername = async (username, password) => {
+  const user = await usersService.getByUsername(username);
+
+  if (!user) {
+    throw new ApiError(401, 'Incorrect username.');
   }
 
-  let isEmailExist = await checkEmailExist(user.email);
-  if (isEmailExist) {
-    return UsersResponses.RegisterResponses.registerAlreadyEmail();
+  if (!(await user.isPasswordMatch(password))) {
+    throw new ApiError(401, 'Incorrect password.');
   }
 
-  const hashedPassword = hashingManager.generateHashPassword(user.passWord);
-  user.passWord = hashedPassword;
-
-  user.otp = createOTP();
-
-  const userDocument = await UserRepository.insertUser(user);
-
-  emailService.sendOTP(user.email, user.otp.number);
-
-  return UsersResponses.RegisterResponses.registerSuccess(userDocument);
+  return user;
 };
 
 exports.loginWithGoogle = async (idToken) => {
@@ -37,28 +27,16 @@ exports.loginWithGoogle = async (idToken) => {
     const { email_verified, email, name, picture } = ticket.payload;
 
     if (!email_verified) {
-      return {
-        isSuccess: false,
-        message: 'Id Token is not valid',
-      };
+      throw new ApiError(400, 'Token is not valid.');
     }
 
-    const user = await usersService.upsertByEmail(email, {
+    return await usersService.upsertByEmail(email, {
       email,
       name,
       avatar: picture,
     });
-
-    const tokens = await tokenService.generateAuthTokens(user);
-    return {
-      isSuccess: true,
-      tokens,
-    };
   } catch (err) {
     console.log(err);
-    return {
-      isSuccess: false,
-      message: err,
-    };
+    throw new ApiError(400, 'Token is not valid.');
   }
 };

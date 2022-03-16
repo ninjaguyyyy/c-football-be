@@ -1,14 +1,21 @@
-const { authService, usersService } = require('../services');
+const { authService, usersService, tokenService } = require('../services');
 
 exports.register = async (req, res) => {
   const user = await usersService.createUser(req.body);
-
   res.status(201).json({ user });
 };
 
-exports.loginWithGoogle = async (req, res) => {
-  const { isSuccess, tokens, message } = await authService.loginWithGoogle(req.body.idToken);
+exports.loginWithUsername = async (req, res) => {
+  const { username, password } = req.body;
+  const user = await authService.loginWithUsername(username, password);
+  const tokens = await tokenService.generateAuthTokens(user);
 
-  isSuccess && res.status(200).json({ tokens });
-  !isSuccess && res.status(401).json({ message });
+  res.status(200).json({ user, tokens });
+};
+
+exports.loginWithGoogle = async (req, res) => {
+  const user = await authService.loginWithGoogle(req.body.idToken);
+  const tokens = await tokenService.generateAuthTokens(user);
+
+  res.status(200).json({ user, tokens });
 };
