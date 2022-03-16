@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const { toJSON } = require('./plugins');
 
 const userSchema = mongoose.Schema(
   {
@@ -26,6 +27,8 @@ const userSchema = mongoose.Schema(
     timestamps: true,
   }
 );
+
+userSchema.plugin(toJSON);
 
 userSchema.statics.isUsernameTaken = async function (username) {
   const user = await this.findOne({ username });
