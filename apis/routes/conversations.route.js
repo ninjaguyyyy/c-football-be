@@ -5,6 +5,6 @@ const { conversationsController } = require('../controllers');
 const router = express.Router();
 
 router.post('/', authUser, conversationsController.create);
-router.get('/:userId', authUser, conversationsController.getByUser);
+router.get('/me', authUser, conversationsController.getByCurrentUser);
 
 module.exports = router;
