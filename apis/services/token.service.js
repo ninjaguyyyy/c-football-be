@@ -34,3 +34,7 @@ const generateToken = (userId, expires, type, secret = process.env.JWT_SECRET_KE
 };
 
 exports.tokenTypes = tokenTypes;
+
+exports.verifyToken = (token) => {
+  return jwt.verify(token, process.env.JWT_SECRET_KEY);
+};

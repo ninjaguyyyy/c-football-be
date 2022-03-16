@@ -1,6 +1,11 @@
 const Conversation = require('../models/conversation.model');
 
-module.exports.createConversation = async (conversation) => {
+exports.createConversation = async (conversation) => {
   // no validate
   return Conversation.create(conversation);
+};
+
+exports.queryConversations = async (filter, options) => {
+  const users = await User.paginate(filter, options);
+  return users;
 };
