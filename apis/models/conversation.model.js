@@ -13,7 +13,12 @@ const conversationSchema = mongoose.Schema(
     ],
     isGroup: {
       type: Boolean,
-      default: false,
+      default() {
+        return this.members.length > 1;
+      },
+    },
+    name: {
+      type: String,
     },
   },
   {

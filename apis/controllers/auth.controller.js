@@ -19,3 +19,10 @@ exports.loginWithGoogle = async (req, res) => {
 
   res.status(200).json({ user, tokens });
 };
+
+exports.loginWithFacebook = async (req, res) => {
+  const user = await authService.loginWithFacebook(req.body.userId, req.body.accessToken);
+  const tokens = await tokenService.generateAuthTokens(user);
+
+  res.status(200).json({ user, tokens });
+};

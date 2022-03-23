@@ -22,6 +22,11 @@ const userSchema = mongoose.Schema(
       type: String,
       required: false,
     },
+    facebookId: {
+      type: String,
+      require: false,
+      private: true,
+    },
   },
   {
     timestamps: true,
