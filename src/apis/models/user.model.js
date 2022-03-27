@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
-const { toJSON } = require('./plugins');
+const { toJSON, paginate } = require('./plugins');
+const ObjectId = mongoose.Types.ObjectId;
 
 const userSchema = mongoose.Schema(
   {
@@ -27,6 +28,12 @@ const userSchema = mongoose.Schema(
       require: false,
       private: true,
     },
+    team: [
+      {
+        type: ObjectId,
+        ref: 'Team',
+      },
+    ],
   },
   {
     timestamps: true,
@@ -34,6 +41,7 @@ const userSchema = mongoose.Schema(
 );
 
 userSchema.plugin(toJSON);
+userSchema.plugin(paginate);
 
 userSchema.statics.isUsernameTaken = async function (username) {
   const user = await this.findOne({ username });

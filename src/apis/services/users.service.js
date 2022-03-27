@@ -21,3 +21,7 @@ exports.createUser = async (user) => {
 exports.getByUsername = async (username) => {
   return User.findOne({ username });
 };
+
+exports.queryUsers = async (filter = {}, options = {}) => {
+  return User.paginate(filter, options);
+};
