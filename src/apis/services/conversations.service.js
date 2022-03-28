@@ -8,3 +8,7 @@ exports.createConversation = async (conversation) => {
 exports.queryConversations = async (filter, options) => {
   return Conversation.paginate(filter, options);
 };
+
+exports.findByMembers = async (members) => {
+  return Conversation.findOne({ members: { $all: members } }).populate('messages');
+};

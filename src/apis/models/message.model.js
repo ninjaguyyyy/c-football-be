@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { toJSON, paginate } = require('./plugins');
 const ObjectId = mongoose.Types.ObjectId;
 
 const messageSchema = mongoose.Schema(
@@ -6,12 +7,12 @@ const messageSchema = mongoose.Schema(
     conversation: {
       type: ObjectId,
       required: true,
-      ref: 'Conversation',
+      ref: 'conversation',
     },
     sender: {
       type: ObjectId,
       required: true,
-      ref: 'User',
+      ref: 'user',
     },
     text: {
       type: String,
@@ -22,5 +23,8 @@ const messageSchema = mongoose.Schema(
     timestamps: true,
   }
 );
+
+messageSchema.plugin(toJSON);
+messageSchema.plugin(paginate);
 
 module.exports = mongoose.model('message', messageSchema);

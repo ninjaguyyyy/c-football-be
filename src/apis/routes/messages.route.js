@@ -1,8 +1,8 @@
 const express = require('express');
+const { messagesController } = require('../controllers');
 const router = express.Router();
 
-router.post('/', (req, res) => {
-  res.send('auth');
-});
+router.post('/', messagesController.createMessage);
+router.get('/by-conversation/:conversationId', messagesController.getByConversation);
 
 module.exports = router;

@@ -6,6 +6,14 @@ module.exports = (httpServer) => {
   });
 
   io.on('connection', (socket) => {
-    console.log('A socket client connected');
+    console.log('A main socket client connected');
+
+    setInterval(() => {
+      socket.emit('test', Math.random());
+    }, 5000);
+  });
+
+  io.of('/chat').on('connection', (socket) => {
+    console.log('A chat socket client connected');
   });
 };

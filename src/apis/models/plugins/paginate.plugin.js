@@ -40,6 +40,8 @@ const paginate = (schema) => {
 
     if (options.populate) {
       options.populate.split(',').forEach((populateOption) => {
+        console.log('aaa', populateOption);
+
         docsPromise = docsPromise.populate(
           populateOption
             .split('.')

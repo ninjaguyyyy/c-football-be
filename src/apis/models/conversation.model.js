@@ -20,6 +20,14 @@ const conversationSchema = mongoose.Schema(
     name: {
       type: String,
     },
+    messages: [
+      {
+        type: ObjectId,
+        required: false,
+        default: [],
+        ref: 'message',
+      },
+    ],
   },
   {
     timestamps: true,
