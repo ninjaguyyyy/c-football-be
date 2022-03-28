@@ -8,3 +8,7 @@ exports.createMessage = async (message) => {
 exports.queryMessages = async (filter, options) => {
   return Message.paginate(filter, { ...options, populate: 'sender,conversation' });
 };
+
+exports.getAllByFilter = async (filter) => {
+  return Message.find({ filter }).populate('conversation').populate('sender').exec();
+};

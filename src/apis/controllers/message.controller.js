@@ -3,10 +3,15 @@ const { messagesService } = require('../services');
 
 exports.getByConversation = async (req, res) => {
   const filter = { conversation: req.params.conversationId };
-  const options = pick(req.query, ['sortBy', 'limit', 'page']);
 
-  const result = await messagesService.queryMessages(filter, options);
-  res.status(200).json(result);
+  // this for paginate feature
+
+  // const options = pick(req.query, ['limit', 'page']);
+  // options.sortBy = 'createdAt:desc';
+  // const result = await messagesService.queryMessages(filter, options);
+
+  const results = await messagesService.getAllByFilter(filter);
+  res.status(200).json({ results });
 };
 
 exports.createMessage = async (req, res) => {
