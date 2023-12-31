@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const { createServer } = require('http');
 const morgan = require('morgan');
+const compression = require('compression');
 
 const routeConfig = require('../apis/routes');
 const { errorHandler, errorConverter } = require('../middlewares/error');
@@ -12,6 +13,7 @@ module.exports = () => {
   const httpServer = createServer(app);
 
   app.use(morgan('dev'));
+  app.use(compression());
 
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
@@ -20,6 +22,12 @@ module.exports = () => {
   app.options('*', cors());
 
   app.use('/api', routeConfig);
+
+  app.get('/test', (req, res) => {
+    res.json({
+      message: 'abc'.repeat(1000000),
+    });
+  });
 
   app.use(function (req, res, next) {
     res.status(404).json({

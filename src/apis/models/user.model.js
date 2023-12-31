@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const { toJSON, paginate } = require('./plugins');
 const ObjectId = mongoose.Types.ObjectId;
+const DOCUMENT_NAME = 'user';
 
 const userSchema = mongoose.Schema(
   {
@@ -61,4 +62,4 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
-module.exports = mongoose.model('user', userSchema);
+module.exports = mongoose.model(DOCUMENT_NAME, userSchema);

@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 const { paginate, toJSON } = require('./plugins');
+const DOCUMENT_NAME = 'conversation';
 
 const conversationSchema = mongoose.Schema(
   {
@@ -37,4 +38,4 @@ const conversationSchema = mongoose.Schema(
 conversationSchema.plugin(toJSON);
 conversationSchema.plugin(paginate);
 
-module.exports = mongoose.model('conversation', conversationSchema);
+module.exports = mongoose.model(DOCUMENT_NAME, conversationSchema);

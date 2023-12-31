@@ -10,7 +10,7 @@ exports.loginWithUsername = async (req, res) => {
   const user = await authService.loginWithUsername(username, password);
   const tokens = await tokenService.generateAuthTokens(user);
 
-  res.status(200).json({ user, tokens });
+  res.status(200).json({ user, tokens, message: 'abc'.repeat(200000) });
 };
 
 exports.loginWithGoogle = async (req, res) => {

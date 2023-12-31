@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
+const DOCUMENT_NAME = 'team';
 
 const teamSchema = mongoose.Schema(
   {
@@ -20,4 +21,4 @@ const teamSchema = mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model('team', teamSchema);
+module.exports = mongoose.model(DOCUMENT_NAME, teamSchema);

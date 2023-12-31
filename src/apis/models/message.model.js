@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const { toJSON, paginate } = require('./plugins');
 const ObjectId = mongoose.Types.ObjectId;
+const DOCUMENT_NAME = 'message';
 
 const messageSchema = mongoose.Schema(
   {
@@ -27,4 +28,4 @@ const messageSchema = mongoose.Schema(
 messageSchema.plugin(toJSON);
 messageSchema.plugin(paginate);
 
-module.exports = mongoose.model('message', messageSchema);
+module.exports = mongoose.model(DOCUMENT_NAME, messageSchema);
