@@ -19,10 +19,21 @@ const electronicsSchema = new Schema(
   { timestamps: true }
 );
 
+const furnitureSchema = new Schema(
+  {
+    manufacturer: { type: String, required: true },
+    model: String,
+    color: String,
+  },
+  { timestamps: true }
+);
+
 const Clothing = mongoose.model('Clothing', clothingSchema);
 const Electronics = mongoose.model('Electronics', electronicsSchema);
+const Furniture = mongoose.model('Furniture', furnitureSchema);
 
 module.exports = {
   Clothing,
   Electronics,
+  Furniture,
 };

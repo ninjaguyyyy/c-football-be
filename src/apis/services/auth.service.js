@@ -1,6 +1,7 @@
 const { OAuth2Client } = require('google-auth-library');
 const axios = require('axios');
 const usersService = require('./users.service');
+const shopService = require('./shop.service');
 const ApiError = require('../../utils/api-error');
 const oAuth2Client = new OAuth2Client(process.env.GoogleClientId);
 
@@ -58,4 +59,18 @@ exports.loginWithFacebook = async (userId, accessToken) => {
     console.log(err);
     throw new ApiError(400, 'Token is not valid.');
   }
+};
+
+exports.loginShop = async (email, password) => {
+  const shop = await shopService.getByEmail(email);
+
+  if (!shop) {
+    throw new ApiError(401, 'Incorrect email.');
+  }
+
+  if (!(await shop.isPasswordMatch(password))) {
+    throw new ApiError(401, 'Incorrect password.');
+  }
+
+  return shop;
 };
