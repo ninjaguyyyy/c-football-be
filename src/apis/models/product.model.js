@@ -1,7 +1,7 @@
 ﻿const mongoose = require('mongoose');
 const slugify = require('slugify');
 
-const { toJSON } = require('./plugins');
+const { toJSON, paginate } = require('./plugins');
 const { ProductTypes } = require('../../constants/enum');
 
 const DOCUMENT_NAME = 'product';
@@ -24,8 +24,7 @@ const productSchema = mongoose.Schema(
     shop: { type: ObjectId, required: true, refPath: 'type' },
     productDetail: { type: ObjectId, required: true, refPath: 'type' },
 
-    isDraft: { type: Boolean, default: true, index: true, select: false },
-    isPublic: { type: Boolean, default: false, index: true, select: false },
+    isPublic: { type: Boolean, default: false, index: true },
   },
   {
     timestamps: true,
@@ -33,11 +32,21 @@ const productSchema = mongoose.Schema(
 );
 
 productSchema.plugin(toJSON);
+productSchema.plugin(paginate);
 
-productSchema.pre('save', async function (next) {
+productSchema.pre(['save'], async function (next) {
   const product = this;
   if (product.isModified('name')) {
     product.slug = slugify(product.name, { lower: true });
+  }
+  next();
+});
+
+productSchema.pre(['findOneAndUpdate'], async function (next) {
+  const update = this.getUpdate();
+
+  if (update?.name) {
+    update.$set.slug = slugify(update.name, { lower: true });
   }
   next();
 });

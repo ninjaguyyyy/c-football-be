@@ -2,6 +2,7 @@
 
 const { Product: ProductModel, ProductDetails } = require('../models');
 const ApiError = require('../../utils/api-error');
+const { updateProduct, getProductById } = require('../models/repositories/product.repo');
 
 const {
   Clothing: ClothingModel,
@@ -18,13 +19,26 @@ class ProductFactory {
 
   static async createProduct(type, payload) {
     const productClass = ProductFactory.productRegistry[type];
-
     if (!productClass) throw new ApiError(httpStatus.BAD_REQUEST, 'No have a Product Class.');
 
     return new productClass(payload).createProduct();
   }
 
-  static async findDraftProducts() {}
+  static async getProducts(filter = {}, options = {}) {
+    return ProductModel.paginate(filter, options);
+  }
+
+  static async updateProduct({ shop, id, payload }) {
+    const product = await getProductById(id);
+    if (!product) throw new ApiError(httpStatus.NOT_FOUND, 'This product is not found');
+
+    if (shop !== product.shop.toString())
+      throw new ApiError(httpStatus.NOT_FOUND, 'This product is not belong to this shop');
+
+    // product = { ...product, ...payload };
+    // return product.updateOne(payload);
+    return updateProduct({ id, payload });
+  }
 }
 
 class Product {

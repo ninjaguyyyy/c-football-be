@@ -8,12 +8,19 @@ exports.createProduct = async (req, res) => {
   res.status(201).json(result);
 };
 
-exports.createProduct = async (req, res) => {
-  const productType = req.body.product_type;
-  const payload = { ...req.body, shop: req.user.sub };
+exports.getProducts = async (req, res) => {
+  const filters = { shop: req.user.sub };
+  const products = await productService.getProducts(filters);
 
-  const result = await productService.createProduct(productType, payload);
-  res.status(201).json(result);
+  res.status(200).json(products);
 };
 
-getProducts;
+exports.updateProduct = async (req, res) => {
+  const shop = req.user.sub;
+  const id = req.params.id;
+  const payload = req.body;
+
+  const products = await productService.updateProduct({ shop, id, payload});
+
+  res.status(200).json(products);
+};
