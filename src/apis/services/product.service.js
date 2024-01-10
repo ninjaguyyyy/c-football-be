@@ -39,6 +39,10 @@ class ProductFactory {
     // return product.updateOne(payload);
     return updateProduct({ id, payload });
   }
+
+  static async getProductById(id) {
+    return getProductById(id);
+  }
 }
 
 class Product {

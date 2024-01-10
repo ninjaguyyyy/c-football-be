@@ -31,6 +31,8 @@ const productSchema = mongoose.Schema(
   }
 );
 
+productSchema.index({ name: 'text', description: 'text' });
+
 productSchema.plugin(toJSON);
 productSchema.plugin(paginate);
 

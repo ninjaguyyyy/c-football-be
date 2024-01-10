@@ -8,7 +8,7 @@ exports.createProduct = async (req, res) => {
   res.status(201).json(result);
 };
 
-exports.getProducts = async (req, res) => {
+exports.getProductsForShop = async (req, res) => {
   const filters = { shop: req.user.sub };
   const products = await productService.getProducts(filters);
 
@@ -20,7 +20,39 @@ exports.updateProduct = async (req, res) => {
   const id = req.params.id;
   const payload = req.body;
 
-  const products = await productService.updateProduct({ shop, id, payload});
+  const products = await productService.updateProduct({ shop, id, payload });
 
   res.status(200).json(products);
+};
+
+exports.getProductsForUser = async (req, res) => {
+  const q = req.query.q;
+  const sortBy = req.query.sortBy;
+
+  const filters = {};
+  const options = {};
+
+  if (q) {
+    filters = {
+      $text: { $search: new RegExp(q) },
+      isPublic: true,
+    };
+  }
+
+  if (sortBy) {
+    options.sortBy = sortBy;
+  }
+
+  options.select = ['name', 'price'];
+
+  const products = await productService.getProducts(filters, options);
+
+  res.status(200).json(products);
+};
+
+exports.getProduct = async (req, res) => {
+  const id = req.params.id;
+  const product = await productService.getProductById(id);
+
+  res.status(200).json(product);
 };
