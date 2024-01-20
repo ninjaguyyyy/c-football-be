@@ -4,7 +4,6 @@ const ApiError = require('../utils/api-error');
 exports.authUser = (req, res, next) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
-  console.log('🚀 ~ file: auth.js:7 ~ token:', token);
 
   if (!token) {
     throw new ApiError(401, 'You need to sign in.');
@@ -12,7 +11,6 @@ exports.authUser = (req, res, next) => {
 
   try {
     const decoded = tokenService.verifyToken(token);
-    console.log('🚀 ~ file: auth.js:15 ~ decoded:', decoded);
     req.user = decoded;
     next();
   } catch (err) {

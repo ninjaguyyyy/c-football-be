@@ -28,16 +28,17 @@ class ProductFactory {
     return ProductModel.paginate(filter, options);
   }
 
-  static async updateProduct({ shop, id, payload }) {
+  static async updateProduct({ type, shop, id, payload }) {
     const product = await getProductById(id);
     if (!product) throw new ApiError(httpStatus.NOT_FOUND, 'This product is not found');
 
     if (shop !== product.shop.toString())
       throw new ApiError(httpStatus.NOT_FOUND, 'This product is not belong to this shop');
 
-    // product = { ...product, ...payload };
-    // return product.updateOne(payload);
-    return updateProduct({ id, payload });
+    const productClass = ProductFactory.productRegistry[type];
+    if (!productClass) throw new ApiError(httpStatus.BAD_REQUEST, 'No have a Product Class.');
+
+    return new productClass(payload).updateProduct(id);
   }
 
   static async getProductById(id) {
@@ -59,6 +60,10 @@ class Product {
   async createProduct(productDetailId) {
     return await ProductModel.create({ ...this, productDetail: productDetailId });
   }
+
+  async updateProduct(productId, payload) {
+    return updateProduct({ id: productId, payload, model: ProductModel });
+  }
 }
 
 class Clothing extends Product {
@@ -70,6 +75,22 @@ class Clothing extends Product {
     if (!newProduct) throw new ApiError(httpStatus.BAD_REQUEST, 'Create new Product fail!');
 
     return newProduct;
+  }
+
+  async updateProduct(productId) {
+    const { productDetail, ...payload } = this;
+
+    const updatedProduct = await super.updateProduct(productId, payload);
+
+    if (productDetail) {
+      await updateProduct({
+        id: updatedProduct.productDetail.toString(),
+        payload: productDetail,
+        model: ClothingModel,
+      });
+    }
+
+    return updatedProduct;
   }
 }
 
@@ -83,6 +104,22 @@ class Electronics extends Product {
 
     return newProduct;
   }
+
+  async updateProduct(productId) {
+    const { productDetail, ...payload } = this;
+
+    const updatedProduct = await super.updateProduct(productId, payload);
+
+    if (productDetail) {
+      await updateProduct({
+        id: updatedProduct.productDetail.toString(),
+        payload: productDetail,
+        model: ElectronicsModel,
+      });
+    }
+
+    return updatedProduct;
+  }
 }
 
 class Furniture extends Product {
@@ -94,6 +131,22 @@ class Furniture extends Product {
     if (!newProduct) throw new ApiError(httpStatus.BAD_REQUEST, 'Create new Product fail!');
 
     return newProduct;
+  }
+
+  async updateProduct(productId) {
+    const { productDetail, ...payload } = this;
+
+    const updatedProduct = await super.updateProduct(productId, payload);
+
+    if (productDetail) {
+      await updateProduct({
+        id: updatedProduct.productDetail.toString(),
+        payload: productDetail,
+        model: FurnitureModel,
+      });
+    }
+
+    return updatedProduct;
   }
 }
 

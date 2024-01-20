@@ -19,8 +19,9 @@ exports.updateProduct = async (req, res) => {
   const shop = req.user.sub;
   const id = req.params.id;
   const payload = req.body;
+  const productType = req.body.product_type;
 
-  const products = await productService.updateProduct({ shop, id, payload });
+  const products = await productService.updateProduct({ shop, id, payload, type: productType });
 
   res.status(200).json(products);
 };
