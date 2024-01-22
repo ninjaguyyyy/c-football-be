@@ -21,7 +21,7 @@ const productSchema = mongoose.Schema(
     },
     variations: { type: Array, default: [] },
 
-    shop: { type: ObjectId, required: true, refPath: 'type' },
+    shop: { type: ObjectId, required: true, ref: 'Shop' },
     productDetail: { type: ObjectId, required: true, refPath: 'type' },
 
     isPublic: { type: Boolean, default: false, index: true },

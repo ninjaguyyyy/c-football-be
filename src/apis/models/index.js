@@ -7,3 +7,4 @@ exports.StadiumOwner = require('./stadium-owner.model');
 exports.Shop = require('./shop.model');
 exports.Product = require('./product.model');
 exports.ProductDetails = require('./product-details.model');
+exports.Inventory = require('./inventory.model');

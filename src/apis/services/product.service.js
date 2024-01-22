@@ -3,6 +3,7 @@
 const { Product: ProductModel, ProductDetails } = require('../models');
 const ApiError = require('../../utils/api-error');
 const { updateProduct, getProductById } = require('../models/repositories/product.repo');
+const { createInventory } = require('../models/repositories/inventory.repo');
 
 const {
   Clothing: ClothingModel,
@@ -58,7 +59,12 @@ class Product {
   }
 
   async createProduct(productDetailId) {
-    return await ProductModel.create({ ...this, productDetail: productDetailId });
+    const newProduct = await ProductModel.create({ ...this, productDetail: productDetailId });
+    if (newProduct) {
+      await createInventory({ product: newProduct._id, stock: newProduct.quantity });
+    }
+
+    return newProduct;
   }
 
   async updateProduct(productId, payload) {
