@@ -13,8 +13,19 @@ const cartSchema = mongoose.Schema(
       default: CartStatusTypes.ACTIVE,
     },
     products: { type: Array, required: true, default: [] },
+    // {
+    //   productId,
+    //   shopId,
+    //   quantity,
+    //   name,
+    //   price
+    // }
     countProducts: { type: Number, default: 0 },
-    user: { type: Number, required: true }, // todo: change to ObjectId
+    user: {
+      type: ObjectId,
+      required: true,
+      ref: 'User',
+    },
   },
   {
     timestamps: true,

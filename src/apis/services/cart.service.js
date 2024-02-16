@@ -1,27 +1,61 @@
-﻿class CartService {
-  static async addToCart(payload) {
-    // todo: create cart if it is not existing
-    // todo: push to product if it is not existing in cart
-    // todo: update quantity if this product is existing in cart
+﻿const CartRepo = require('../models/repositories/cart.repo');
+
+class CartService {
+  static async addToCart(userId, product) {
+    const cart = await CartRepo.findByUserId(userId);
+
+    if (!cart) {
+      return await CartRepo.createCart(userId, product);
+    }
+
+    if (!cart.products.length) {
+      cart.products = [product];
+      return await cart.save();
+    }
+
+    return await CartRepo.updateQuantity(userId, product);
   }
 
-  static async updateDiscount(payload) {
-    // todo: ..
+  // payload:
+  // {
+  //   shopOrderIds: [
+  //     {
+  //       shopId,
+  //       products: [
+  //         {
+  //           quantity,
+  //           price,
+  //           shopId,
+  //           oldQuantity,
+  //           productId
+  //         }
+  //       ]
+  //     }
+  //   ]
+  // }
+  static async updateCart(userId, payload) {
+    const { productId, quantity, oldQuantity } = payload.shopOrderIds[0]?.products[0];
+
+    // todo: check valid product id
+    // todo: check valid shop id has this product id
+
+    if (quantity === 0) {
+      // todo: delete product
+    }
+
+    return await CartRepo.updateQuantity(userId, {
+      productId,
+      quantity: quantity - oldQuantity,
+    });
   }
 
-  static async getDiscounts() {
-    // todo: ..
+  static async getCart(userId) {
+    return CartRepo.findByUserId(userId);
   }
 
-  static async calcDiscountAmount() {
-    // todo: ..
-  }
-
-  static async cancelDiscount() {
-    // todo: ..
-  }
-
-  static async deleteDiscount() {
-    // todo: ..
+  static async deleteCartProduct(userId, productId) {
+    return CartRepo.deleteProductFromCart(userId, productId);
   }
 }
+
+module.exports = CartService;

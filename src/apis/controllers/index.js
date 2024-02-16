@@ -3,3 +3,4 @@ exports.authController = require('./auth.controller');
 exports.usersController = require('./users.controller');
 exports.messagesController = require('./message.controller');
 exports.productController = require('./product.controller');
+exports.cartController = require('./cart.controller');

@@ -5,6 +5,7 @@ const usersRoute = require('./users.route');
 const conversationsRoute = require('./conversations.route');
 const messagesRoute = require('./messages.route');
 const productsRoute = require('./products.route');
+const cartRoute = require('./cart.route');
 
 const { authUser } = require('../../../middlewares/auth');
 
@@ -16,6 +17,7 @@ const definedRoutes = [
   { path: '/conversations', route: conversationsRoute, isAuth: true },
   { path: '/messages', route: messagesRoute, isAuth: true },
   { path: '/products', route: productsRoute, isAuth: true },
+  { path: '/cart', route: cartRoute, isAuth: true },
 ];
 
 definedRoutes.forEach(({ path, route, isAuth }) =>
