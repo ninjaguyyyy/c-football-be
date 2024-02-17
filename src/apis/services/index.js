@@ -7,3 +7,4 @@ exports.messagesService = require('./messages.service');
 exports.shopService = require('./shop.service');
 exports.productService = require('./product.service');
 exports.cartService = require('./cart.service');
+exports.discountService = require('./discount.service');
